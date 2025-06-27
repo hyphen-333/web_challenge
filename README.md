@@ -1,51 +1,118 @@
 # web_challenge
 
-This project is test project
+A simple Express.js RESTful API in TypeScript demonstrating CRUD operations with in-memory storage, along with Jest unit tests following the AAA (Arrange–Act–Assert) pattern.
 
-## 1.Express + built-in JSON parser
+## Prerequisites
 
-###
+- Node.js v14+ or later
+- npm (Node Package Manager)
 
-    I chose Express because it’s the de-facto minimal, unopinionated framework for Node.js REST APIs. By using app.use(express.json()) (instead of the older body-parser package) you get lightweight, zero-config JSON parsing out of the box.
+## Installation
 
-## 2.In-memory Map store
+```bash
+git clone https://github.com/hyphen-333/web_challenge.git
+cd web_challenge
+npm install
+```
 
-###
+## Project Structure
 
-    For a simple demo, spinning up a real database adds noise. A Map<string,Item> lets us focus purely on the shape of our CRUD endpoints without boilerplate—each entry’s key is its id, which makes lookups/updates/deletes O(1).
+```
+.
+├── src
+│   ├── app.ts           # Express app, handlers, and in-memory store
+│   ├── server.ts        # Bootstraps and listens
+│   └── models
+│       └── Item.ts      # Item interface definition
+├── tests
+│   └── itemHandlers.test.ts  # Jest unit tests for CRUD handlers
+├── package.json         # NPM dependencies and scripts
+├── tsconfig.json        # TypeScript configuration
+├── jest.config.js       # Jest configuration
+└── README.md            # Project overview and instructions
+```
 
-## 3. Strongly-typed DTOs & RequestHandler generics
+## Scripts
 
-###
+Add or verify the following scripts in your `package.json`:
 
-    Defining CreateItemDto and UpdateItemDto makes it crystal-clear what shape of data each route expects.
+```json
+"scripts": {
+  "dev": "ts-node-dev --respawn src/server.ts",
+  "build": "tsc",
+  "test": "jest"
+}
+```
 
-    Using RequestHandler<Params,ResBody,ReqBody> guarantees at compile time that, for example, req.body has a name on POST or that req.params.id is always a string. No more any!
+- **`npm run dev`**: Starts the development server with automatic reloads.
+- **`npm run build`**: Compiles TypeScript to JavaScript in the `dist/` folder.
+- **`npm test`**: Runs the Jest test suite.
 
-## 4.Named handler functions
+## Usage
 
-###
+1. **Start the server**
 
-    Pulling each CRUD operation into its own constant (createItem, getAllItems, etc.) improves readability and makes it trivial to unit-test each piece in isolation.
+   ```bash
+   npm run dev
+   ```
 
-## 5.RESTful conventions & HTTP status codes
+2. **API Endpoints**
 
-###
+   - **Create an item**
 
-    - POST /items → 201 (Created)
+     ```http
+     POST /items
+     Content-Type: application/json
 
-    - GET /items → 200 (OK)
+     {
+       "name": "Sample Item",
+       "description": "Optional description"
+     }
+     ```
 
-    - GET /items/:id → 404 if missing
+     - **Success**: `201 Created` with created item JSON
+     - **Error**: `400 Bad Request` if `name` is missing
 
-    - PUT /items/:id → 200 with updated resource
+   - **Get all items**
 
-    - DELETE /items/:id → 204 (No Content)
+     ```http
+     GET /items
+     ```
 
-    Sticking to these standard codes and verb/URL pairings makes the API predictable for any client.
+     - **Success**: `200 OK` with array of items
 
-## 6. Global error middleware
+   - **Update an item**
 
-###
+     ```http
+     PUT /items/:id
+     Content-Type: application/json
 
-    A catch-all ErrorRequestHandler at the bottom ensures any uncaught exception is turned into a 500 Internal Server Error JSON response, keeping our surface area consistent.
+     {
+       "name": "Updated Name",
+       "description": "Updated description"
+     }
+     ```
+
+     - **Success**: `200 OK` with updated item JSON
+     - **Error**: `404 Not Found` if item ID does not exist
+
+   - **Delete an item**
+
+     ```http
+     DELETE /items/:id
+     ```
+
+     - **Success**: `204 No Content`
+     - **Error**: `404 Not Found` if item ID does not exist
+
+## Running Tests
+
+```bash
+npm test
+```
+
+The Jest test suite covers all CRUD handlers and ensures the in-memory store is reset before each test.
+
+---
+
+Feel free to extend this project by integrating a real database, adding validation middleware, or expanding test coverage!
