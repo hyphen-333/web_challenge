@@ -6,7 +6,10 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.3",
+    "@types/jest": "^30.0.0",
     "@types/node": "^24.0.4",
+    "jest": "^30.0.3",
+    "ts-jest": "^29.4.0",
     "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.8.3"
@@ -16,7 +19,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn server.ts"
+    "dev": "ts-node-dev --respawn server.ts",
+    "test": "jest"
   },
   "keywords": [],
   "author": "",
