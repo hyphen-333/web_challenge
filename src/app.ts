@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { v4 as uuid } from "uuid";
-import { Item } from "../models/Item";
+import { Item } from "./models/Item";
 
 //
 // — shared in-memory store
