@@ -112,7 +112,3 @@ npm test
 ```
 
 The Jest test suite covers all CRUD handlers and ensures the in-memory store is reset before each test.
-
----
-
-Feel free to extend this project by integrating a real database, adding validation middleware, or expanding test coverage!
